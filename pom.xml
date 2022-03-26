@@ -11,6 +11,12 @@
     <modules>
         <module>Day02</module>
         <module>day01</module>
+        <module>Day03</module>
+        <module>Day04</module>
+        <module>Day05</module>
+        <module>Day06</module>
+        <module>Day07</module>
+        <module>Day08</module>
     </modules>
 
     <!-- 用到了scala写的通信组件akka -->
@@ -37,14 +43,11 @@
             <artifactId>flink-clients_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-api-java-bridge_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
