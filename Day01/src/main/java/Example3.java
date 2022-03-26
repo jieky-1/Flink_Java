@@ -39,7 +39,8 @@ public class Example3 {
                             out.collect(new WordWithCount(e, 1L));
                         }
                     }
-                }).setParallelism(1);
+                }).setParallelism(2);
+
 
         // 分组：shuffle
         KeyedStream<WordWithCount, String> keyedStream = mappedStream
