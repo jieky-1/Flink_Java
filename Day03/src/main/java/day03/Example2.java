@@ -20,6 +20,7 @@ public class Example2 {
                     @Override
                     public void run(SourceContext<Integer> ctx) throws Exception {
                         for (int i = 0; i < 10; i++) {
+                            // 根据当前子任务的索引进行数据的流动
                             if (i % 2 == getRuntimeContext().getIndexOfThisSubtask()) {
                                 ctx.collect(i);
                             }
@@ -28,12 +29,11 @@ public class Example2 {
 
                     @Override
                     public void cancel() {
-
+                        // 和run()配合使用，结束run()中的循环
                     }
                 })
                 .setParallelism(2)
-                .print()
-                .setParallelism(2);
+                .print().setParallelism(2);
 
         env.execute();
     }

@@ -13,9 +13,9 @@ public class Example4 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
-
+        // 先在终端启动 `nc -lk 9999`
         env
-                .socketTextStream("localhost", 9999)
+                .socketTextStream("hadoop102", 9999)
                 .keyBy(r -> 1)
                 .process(new MyKeyed())
                 .print();

@@ -10,6 +10,7 @@ import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.util.Collector;
 
+import java.sql.Timestamp;
 import java.util.Random;
 
 // 状态变量
@@ -72,6 +73,7 @@ public class Example5 {
                             long tenSecLater = ctx.timerService().currentProcessingTime() + 10 * 1000L;
                             ctx.timerService().registerProcessingTimeTimer(tenSecLater);
                             timerTs.update(tenSecLater);
+                            System.out.println("注册时间："+ new Timestamp(timerTs.value()));
                         }
                     }
 
@@ -80,6 +82,7 @@ public class Example5 {
                         super.onTimer(timestamp, ctx, out);
                         if (valueState.value() != null) {
                             out.collect((double) valueState.value().f0 / valueState.value().f1);
+                            System.out.println("触发时间："+ new Timestamp(timerTs.value()));
                             timerTs.clear();
                         }
                     }

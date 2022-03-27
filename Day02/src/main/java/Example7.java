@@ -14,7 +14,7 @@ public class Example7 {
         env
                 .fromElements(1,2,3,4).setParallelism(1)
                 .rebalance()
-                .print("rebalance: ").setParallelism(2);
+                .print("reb   alance: ").setParallelism(2);
 
         env
                 .fromElements(1,2,3,4).setParallelism(1)
