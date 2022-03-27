@@ -10,6 +10,7 @@ public class Example7 {
                 .shuffle()
                 .print("shuffle: ").setParallelism(2);
 
+        // 不会吧，竟然会覆盖本地
         env
                 .fromElements(1,2,3,4).setParallelism(1)
                 .rebalance()
