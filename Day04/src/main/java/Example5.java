@@ -17,6 +17,7 @@ public class Example5 {
 
         env
                 .socketTextStream("localhost", 9999)
+                // 丢失类型，通过returns来明确数据类型
                 .map(r -> Tuple2.of(r.split(" ")[0], Long.parseLong(r.split(" ")[1]) * 1000L))
                 .returns(Types.TUPLE(Types.STRING, Types.LONG))
                 .assignTimestampsAndWatermarks(

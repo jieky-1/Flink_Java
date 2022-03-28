@@ -57,6 +57,7 @@ public class Example3 {
                 mapState.put(windowStart, 1);
             }
 
+            // 同一个时间戳只能注册一个定时器，后面重复注册的无效
             ctx.timerService().registerProcessingTimeTimer(windowEnd - 1L);
         }
 

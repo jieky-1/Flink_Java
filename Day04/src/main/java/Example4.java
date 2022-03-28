@@ -2,6 +2,7 @@ import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
@@ -26,10 +27,14 @@ public class Example4 {
                     @Override
                     public Tuple2<String, Long> map(String value) throws Exception {
                         String[] arr = value.split(" ");
+                        // 单位是毫秒
                         return Tuple2.of(arr[0], Long.parseLong(arr[1]) * 1000L);
                     }
                 })
                 // 默认每隔200ms的机器时间，插入一次水位线
+                // 水位线 = 观察到的最大时间戳 - 手动设置的最大延迟时间 - 1毫秒
+                // 水位线是一种逻辑时钟，Flink认为时间戳小于等于水位线的事件都到了。
+                // 事件时间的水位线相当于处理时间的机器时间，到了窗口的边界，窗口中的元素就进入计算
                 .assignTimestampsAndWatermarks(
                         // 最大延迟时间设置为5秒
                         WatermarkStrategy.<Tuple2<String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(5))
