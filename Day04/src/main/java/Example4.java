@@ -35,6 +35,8 @@ public class Example4 {
                 // 水位线 = 观察到的最大时间戳 - 手动设置的最大延迟时间 - 1毫秒
                 // 水位线是一种逻辑时钟，Flink认为时间戳小于等于水位线的事件都到了。
                 // 事件时间的水位线相当于处理时间的机器时间，到了窗口的边界，窗口中的元素就进入计算
+                // 中国处于第8时区
+                // assignTimestampsAndWatermarks 关键的代码，用了这个表示使用逻辑时间
                 .assignTimestampsAndWatermarks(
                         // 最大延迟时间设置为5秒
                         WatermarkStrategy.<Tuple2<String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(5))
@@ -47,6 +49,9 @@ public class Example4 {
                 )
                 .keyBy(r -> r.f0)
                 .window(TumblingEventTimeWindows.of(Time.seconds(5))) // 5秒的事件时间滚动窗口
+                // 水位线到达窗口边界的时候，触发窗口（窗口是左闭右开）计算
+                // 默认每隔200ms的机器时间，计算并插入一次水位线
+                // 当窗口关闭时，迟到事件 默认被丢弃
                 .process(new ProcessWindowFunction<Tuple2<String, Long>, String, String, TimeWindow>() {
                     @Override
                     public void process(String key, Context context, Iterable<Tuple2<String, Long>> elements, Collector<String> out) throws Exception {

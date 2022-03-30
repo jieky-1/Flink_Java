@@ -26,7 +26,7 @@ public class Example7 {
         env.setParallelism(1);
 
         env
-                .readTextFile("/home/zuoyuan/flink0224tutorial/src/main/resources/UserBehavior.csv")
+                .readTextFile("E:\\BigData200105\\Flink_Java\\Day04\\src\\main\\resources\\UserBehavior.csv")
                 .map(new MapFunction<String, UserBehavior>() {
                     @Override
                     public UserBehavior map(String value) throws Exception {
@@ -80,6 +80,7 @@ public class Example7 {
         @Override
         public void processElement(ItemViewCount value, Context ctx, Collector<String> out) throws Exception {
             listState.add(value);
+            // 同一个时间戳只能定义一个定时器，后面相同时间戳的定时器注册后无效
             ctx.timerService().registerEventTimeTimer(value.windowEnd + 1L);
         }
 

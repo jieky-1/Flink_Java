@@ -17,7 +17,7 @@ public class Example6 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
-        // 每隔1分钟插入一次水位线
+        // 每隔1分钟插入一次水位线（机器时间）
         env.getConfig().setAutoWatermarkInterval(60 * 1000L);
 
         env

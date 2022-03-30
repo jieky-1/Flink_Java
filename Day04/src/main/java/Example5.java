@@ -30,6 +30,7 @@ public class Example5 {
                         })
                 )
                 .keyBy(r -> r.f0)
+                // 水位线到达定时器的时候，触发定时器计算
                 .process(new KeyedProcessFunction<String, Tuple2<String, Long>, String>() {
                     @Override
                     public void processElement(Tuple2<String, Long> value, Context ctx, Collector<String> out) throws Exception {
