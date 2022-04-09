@@ -1,5 +1,3 @@
-package day05;
-
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -26,6 +24,7 @@ public class Example1 {
                     }
                 })
                 .assignTimestampsAndWatermarks(
+                        // 最大延迟时间为0等效
                         WatermarkStrategy.<Tuple2<String, Long>>forMonotonousTimestamps()
                         .withTimestampAssigner(new SerializableTimestampAssigner<Tuple2<String, Long>>() {
                             @Override
@@ -40,7 +39,7 @@ public class Example1 {
                         if (value.f1 < ctx.timerService().currentWatermark()) {
                             out.collect("迟到元素到了: " + value);
                         } else {
-                            out.collect( value + "元素没有迟到");
+                            out.collect(   value + "元素没有迟到");
                         }
                     }
                 })

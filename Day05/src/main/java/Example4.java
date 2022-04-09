@@ -1,5 +1,3 @@
-package day05;
-
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -41,11 +39,15 @@ public class Example4 {
                                     public long extractTimestamp(Tuple2<String, Long> element, long recordTimestamp) {
                                         return element.f1;
                                     }
+
                                 })
                 )
                 .keyBy(r -> r.f0)
                 .window(TumblingEventTimeWindows.of(Time.seconds(5)))
+                // 允许数据迟到的时间，超过这个时间 窗口将被彻底删除
+                // 窗口销毁时间=窗口结束时间+允许等待时间
                 .allowedLateness(Time.seconds(5))
+                // 延迟时间超过5秒的数据发到侧输出流
                 .sideOutputLateData(new OutputTag<Tuple2<String, Long>>("late") {
                 })
                 .process(new ProcessWindowFunction<Tuple2<String, Long>, String, String, TimeWindow>() {

@@ -1,5 +1,3 @@
-package day05;
-
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -11,7 +9,7 @@ import org.apache.flink.util.OutputTag;
 
 // 迟到数据发送到侧输出流中去
 public class Example2 {
-    // 定义侧输出流的名字：侧输出标签
+    // 定义侧输出流的名字：侧输出标签：泛型和大括号要指定，不然运行时报错
     private static OutputTag<String> lateElement = new OutputTag<String>("late-element"){};
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

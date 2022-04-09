@@ -1,5 +1,3 @@
-package day05;
-
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
@@ -47,7 +45,7 @@ public class Example3 {
 
         result.print();
 
-        // 侧输出标签是单例模式
+        // 侧输出标签是单例模式：实例化两次，说明侧输出标签是单例
         result.getSideOutput(new OutputTag<String>("late"){}).print("late: ");
 
         env.execute();

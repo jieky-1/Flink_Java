@@ -1,5 +1,3 @@
-package day05;
-
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -36,6 +34,7 @@ public class Example7 {
                             }
                         })
                 )
+                // 分流时 是复制广播水位线，即每一条分流看到的水位线是一样的
                 .keyBy(r -> r.f0)
                 .window(TumblingEventTimeWindows.of(Time.seconds(5)))
                 .process(new ProcessWindowFunction<Tuple2<String, Long>, String, String, TimeWindow>() {

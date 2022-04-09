@@ -1,6 +1,3 @@
-package day05;
-
-import day02.Example1;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoFlatMapFunction;
@@ -23,19 +20,23 @@ public class Example9 {
 
         DataStreamSource<String> queryStream = env.socketTextStream("localhost", 9999).setParallelism(1);
 
+        // 流元素调用ProcessElement和更新逻辑时钟没有必然关系，水位线才会触发更新逻辑时钟的事件
         clickStream
                 .keyBy(r -> r.user)
                 .connect(queryStream.broadcast())
                 .flatMap(new CoFlatMapFunction<Event, String, Event>() {
+                    // 作用域是整个任务槽（而不是单个任务槽中的不同key状态域各自有），queryStream做广播，每个任务槽的query赋值逻辑是一样的
                     private String query = "";
+
                     @Override
                     public void flatMap1(Event value, Collector<Event> out) throws Exception {
                         if (value.url.equals(query)) out.collect(value);
                     }
 
+                    // 根据事件调用(类似于SQL的WHERE变量)
                     @Override
                     public void flatMap2(String value, Collector<Event> out) throws Exception {
-                        query = value;
+                        query = value ;
                     }
                 })
                 .print();

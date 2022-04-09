@@ -1,5 +1,3 @@
-package day05;
-
 import org.apache.flink.api.common.eventtime.*;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -49,6 +47,7 @@ public class Example5 {
                 @Override
                 public void onPeriodicEmit(WatermarkOutput output) {
                     // 发送水位线，注意水位线的计算公式
+                    // 多流水位线的情况后期来说，状态变量底层是使用hashmap实现
                     output.emitWatermark(new Watermark(maxTs - bound - 1L));
                 }
             };
