@@ -24,6 +24,7 @@ public class Example9 {
         clickStream
                 .keyBy(r -> r.user)
                 .connect(queryStream.broadcast())
+                //CoFlatMapFunction不是富函数，无法注册定时器、无法定义状态变量
                 .flatMap(new CoFlatMapFunction<Event, String, Event>() {
                     // 作用域是整个任务槽（而不是单个任务槽中的不同key状态域各自有），queryStream做广播，每个任务槽的query赋值逻辑是一样的
                     private String query = "";

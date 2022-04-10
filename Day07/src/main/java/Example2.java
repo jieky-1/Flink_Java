@@ -1,4 +1,3 @@
-import day04.Example7;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -25,13 +24,17 @@ public class Example2 {
         env.setParallelism(1);
 
         Properties properties = new Properties();
-        properties.setProperty("bootstrap.servers", "localhost:9092");
+        properties.setProperty("bootstrap.servers", "hadoop102:9092");
         properties.setProperty("group.id", "consumer-group");
         properties.setProperty("key.deserializer",
                 "org.apache.kafka.common.serialization.StringDeserializer");
         properties.setProperty("value.deserializer",
                 "org.apache.kafka.common.serialization.StringDeserializer");
+        // 始终读取最新的数据
         properties.setProperty("auto.offset.reset", "latest");
+
+        // 水位线默认产生的周期为200ms
+        env.getConfig().setAutoWatermarkInterval(200);
 
         env
                 .addSource(new FlinkKafkaConsumer<String>(
@@ -51,6 +54,7 @@ public class Example2 {
                 })
                 .filter(r -> r.behavior.equals("pv"))
                 .assignTimestampsAndWatermarks(
+                        // Creates a watermark strategy for situations with monotonously ascending timestamps.
                         WatermarkStrategy.<UserBehavior>forMonotonousTimestamps()
                         .withTimestampAssigner(new SerializableTimestampAssigner<UserBehavior>() {
                             @Override

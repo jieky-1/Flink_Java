@@ -1,5 +1,3 @@
-package day06;
-
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.ValueState;
@@ -26,7 +24,7 @@ public class Example3 {
                         ctx.collectWithTimestamp(Event.of("order-1", "order", 1000L), 1000L);
                         ctx.emitWatermark(new Watermark(999L));
                         ctx.collectWithTimestamp(Event.of("order-2", "order", 3000L), 3000L);
-                        ctx.emitWatermark(new Watermark(8001L));
+                        //ctx.emitWatermark(new Watermark(8000L));
                     }
 
                     @Override
@@ -41,7 +39,7 @@ public class Example3 {
                     public void run(SourceContext<Event> ctx) throws Exception {
                         ctx.collectWithTimestamp(Event.of("order-1", "weixin", 4000L), 4000L);
                         ctx.emitWatermark(new Watermark(3999L));
-                        ctx.emitWatermark(new Watermark(8001L));
+                        ctx.emitWatermark(new Watermark(8000L));
                         ctx.collectWithTimestamp(Event.of("order-2", "weixin", 9000L), 9000L);
                     }
 

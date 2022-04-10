@@ -25,12 +25,14 @@ public class Example1 {
                 .fromElements(
                         Tuple2.of("a", "a"),
                         Tuple2.of("b", "b"),
-                        Tuple2.of("a", "aaa")
+                        Tuple2.of("a", "aaa"),
+                        Tuple2.of("c", "ccc")
                 );
 
         stream1
                 .keyBy(r -> r.f0)
                 .connect(stream2.keyBy(r -> r.f0))
+                // 内连接
                 .process(new CoProcessFunction<Tuple2<String, Integer>, Tuple2<String, String>, String>() {
                     private ListState<Tuple2<String, Integer>> listState1;
                     private ListState<Tuple2<String, String>> listState2;

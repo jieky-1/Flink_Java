@@ -1,5 +1,3 @@
-package day06;
-
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -32,6 +30,7 @@ public class Example4 {
                 );
 
         SingleOutputStreamOperator<Event> pvStream = env
+                // 离线数据只会在开头和结尾插入两个水位线，中间不回插入任何水位线，因此注册的定时器在中间不会被触发
                 .fromElements(
                         Event.of("user-1", "pv", 5 * 60 * 1000L),
                         Event.of("user-1", "pv", 10 * 60 * 1000L),

@@ -15,6 +15,7 @@ public class Example4 {
 
         env
                 .fromElements(Tuple2.of("key", 1), Tuple2.of("key", 2))
+                // 富函数都有open和close方法
                 .addSink(new RichSinkFunction<Tuple2<String, Integer>>() {
                     private Connection conn;
                     private PreparedStatement insertStmt;

@@ -19,8 +19,10 @@ public class Example3 {
                         Tuple2.of("key", 2)
                 );
 
+        // redis的驱动要写在后面，日志包的前面，不然报错：应用flink1.2
         FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("localhost").build();
 
+        // 幂等写入
         stream.addSink(new RedisSink<Tuple2<String, Integer>>(conf, new MyRedisMapper()));
 
         env.execute();
@@ -39,6 +41,7 @@ public class Example3 {
 
         @Override
         public RedisCommandDescription getCommandDescription() {
+            // 指定 命令、表名
             return new RedisCommandDescription(RedisCommand.HSET, "tuple");
         }
     }

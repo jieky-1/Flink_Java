@@ -1,4 +1,4 @@
-package day06;
+
 
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -11,7 +11,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoProcessFunction;
 import org.apache.flink.util.Collector;
 
-// 实时对账
+// 实时对账:离线数据集只会插入两个水位线 开始负无穷、结束正无穷，中间没有产生水位线去触发定时器
+// 再次强调，processElement处理数据的时间和水位线没有必然关系：
+// 唯一的关系是 水位线=时间时间-最大延迟时间-1，水位线默认200ms产生一次
 public class Example2 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -34,7 +36,7 @@ public class Example2 {
 
         SingleOutputStreamOperator<Event> weixinStream = env
                 .fromElements(
-                        Event.of("order-1", "weixin", 30000L),
+                        Event.of("order-1", "weixin", 3000L),
                         Event.of("order-3", "weixin", 4000L)
                 )
                 .assignTimestampsAndWatermarks(
