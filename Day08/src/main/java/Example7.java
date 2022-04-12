@@ -35,7 +35,7 @@ public class Example7 {
                                 })
                 );
 
-        // 创建表环境
+        // 创建表环境：固定写法
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
         StreamTableEnvironment tableEnvironment = StreamTableEnvironment.create(env, settings);
 
@@ -45,7 +45,7 @@ public class Example7 {
                         stream,
                         $("f0").as("user"),
                         $("f1").as("url"),
-                        // 使用rowtime方法指定f2字段是事件时间
+                        // 使用rowtime方法指定f2字段是事件时间：不然TABLE不知道那个字段是事件时间
                         $("f2").rowtime().as("cTime")
                 );
 

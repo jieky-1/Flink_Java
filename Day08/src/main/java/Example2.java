@@ -24,7 +24,7 @@ public class Example2 {
         env.setParallelism(1);
 
         env
-                .readTextFile("/home/zuoyuan/flink0224tutorial/src/main/resources/UserBehavior.csv")
+                .readTextFile("E:\\BigData200105\\Flink_Java\\Day08\\src\\main\\resources\\UserBehavior.csv")
                 .map(new MapFunction<String, UserBehavior>() {
                     @Override
                     public UserBehavior map(String value) throws Exception {
@@ -66,6 +66,7 @@ public class Example2 {
     public static class CountAgg implements AggregateFunction<UserBehavior, Tuple2<Long, BloomFilter<String>>, Long> {
         @Override
         public Tuple2<Long, BloomFilter<String>> createAccumulator() {
+            // 处理的数据类型、拟插入的数据量、期望的错误率
             return Tuple2.of(0L, BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), 100000, 0.01));
         }
 

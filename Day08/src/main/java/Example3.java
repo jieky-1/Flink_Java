@@ -18,6 +18,7 @@ public class Example3 {
         env.setParallelism(1);
 
         SingleOutputStreamOperator<Event> stream = env
+                // 离线数据的水位线只在开始和结束两个位置产生，分别是无限小、无限大
                 .fromElements(
                         new Event("user-1", "fail", 1000L),
                         new Event("user-1", "fail", 2000L),

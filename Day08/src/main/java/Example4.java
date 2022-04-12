@@ -45,6 +45,7 @@ public class Example4 {
                 .times(3);
 
         // 在流上匹配模板
+        // keyBy后四个fail变成了连续的
         PatternStream<Event> patternStream = CEP.pattern(stream.keyBy(r -> r.user), pattern);
 
         // 使用select方法将匹配到的事件取出

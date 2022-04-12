@@ -18,7 +18,7 @@ public class Example10 {
         env.setParallelism(1);
 
         SingleOutputStreamOperator<UserBehavior> stream = env
-                .readTextFile("/home/zuoyuan/flink0224tutorial/src/main/resources/UserBehavior.csv")
+                .readTextFile("E:\\BigData200105\\Flink_Java\\Day08\\src\\main\\resources\\UserBehavior.csv")
                 .map(new MapFunction<String, UserBehavior>() {
                     @Override
                     public UserBehavior map(String value) throws Exception {

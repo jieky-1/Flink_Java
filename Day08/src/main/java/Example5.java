@@ -71,6 +71,7 @@ public class Example5 {
 
                         if (nextState.equals("FAIL")) {
                             out.collect("用户" + value.user + "连续三次登录失败了");
+                            // 不能重置到初始状态，否则会把前两个fail信息丢失掉
                             currentState.update("S2");
                         } else if (nextState.equals("SUCCESS")) {
                             currentState.clear();
