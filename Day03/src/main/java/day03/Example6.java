@@ -25,7 +25,7 @@ public class Example6 {
                     public void run(SourceContext<Integer> ctx) throws Exception {
                         while (running) {
                             ctx.collect(random.nextInt());
-                            Thread.sleep(300L);
+                            Thread.sleep(600L);
                         }
                     }
 
@@ -73,7 +73,11 @@ public class Example6 {
                 long oneSecLater = ctx.timerService().currentProcessingTime() + 1000L;
                 ctx.timerService().registerProcessingTimeTimer(oneSecLater);
                 timerTs.update(oneSecLater);
+                System.out.println("注册timer");
             }
+
+            // 定时器注册后连续两个上升将触发定时器
+            System.out.println("value:" + value);
         }
 
         @Override

@@ -15,7 +15,12 @@ public class Example3 {
                     @Override
                     public void invoke(Integer value, Context context) throws Exception {
                         SinkFunction.super.invoke(value, context);
+                        System.out.println(context.timestamp());
+                        System.out.println(context.currentProcessingTime());
+                        System.out.println(context.currentWatermark());
+
                         System.out.println(value);
+                        Thread.sleep(1000);
                     }
                 });
 

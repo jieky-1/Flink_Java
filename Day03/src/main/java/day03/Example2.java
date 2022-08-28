@@ -20,8 +20,8 @@ public class Example2 {
                     @Override
                     public void run(SourceContext<Integer> ctx) throws Exception {
                         for (int i = 0; i < 10; i++) {
-                            // 根据当前子任务的索引进行数据的流动
-                            if (i % 2 == getRuntimeContext().getIndexOfThisSubtask()) {
+                            // 根据当前子任务（3个subtask）的索引进行数据的流动
+                            if (i % 3 == getRuntimeContext().getIndexOfThisSubtask()) {
                                 ctx.collect(i);
                             }
                         }

@@ -39,6 +39,11 @@ public class Example9 {
             out.collect("用户：" + key + " 在窗口" +
                     "" + new Timestamp(windowStart) + "~" + new Timestamp(windowEnd) + "" +
                     "中的pv次数是：" + count);
+
+            // 打印窗口内元素的时间戳，这个框架没有用到元素的时间戳
+            for(Event element:elements ){
+                System.out.println(new Timestamp(element.timestamp));
+            }
         }
     }
 

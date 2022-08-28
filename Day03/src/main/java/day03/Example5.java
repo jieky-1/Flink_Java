@@ -69,6 +69,7 @@ public class Example5 {
                             valueState.update(Tuple2.of(tmp.f0 + value, tmp.f1 + 1));
                         }
 
+                        // 判断定时器是否已注册
                         if (timerTs.value() == null) {
                             long tenSecLater = ctx.timerService().currentProcessingTime() + 10 * 1000L;
                             ctx.timerService().registerProcessingTimeTimer(tenSecLater);
@@ -82,7 +83,8 @@ public class Example5 {
                         super.onTimer(timestamp, ctx, out);
                         if (valueState.value() != null) {
                             out.collect((double) valueState.value().f0 / valueState.value().f1);
-                            System.out.println("触发时间："+ new Timestamp(timerTs.value()));
+                            System.out.println("触发时间1："+ new Timestamp(timerTs.value()));
+                            System.out.println("触发时间2："+ new Timestamp(timestamp));
                             timerTs.clear();
                         }
                     }
