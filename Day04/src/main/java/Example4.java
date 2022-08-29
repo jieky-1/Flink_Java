@@ -21,19 +21,20 @@ public class Example4 {
 
         env
                 // `a 1`
-                .socketTextStream("localhost", 9999)
-                // (a, 1000L)
+                .socketTextStream("hadoop102", 9999)
+                // (a, 1000L1 )
                 .map(new MapFunction<String, Tuple2<String, Long>>() {
                     @Override
                     public Tuple2<String, Long> map(String value) throws Exception {
                         String[] arr = value.split(" ");
                         // 单位是毫秒
-                        return Tuple2.of(arr[0], Long.parseLong(arr[1]) * 1000L);
+                        System.out.println(new Timestamp(Long.parseLong(arr[1])));
+                        return Tuple2.of(arr[0], Long.parseLong(arr[1]));
                     }
                 })
                 // 默认每隔200ms的机器时间，插入一次水位线
-                // 水位线 = 观察到的最大时间戳 - 手动设置的最大延迟时间 - 1毫秒
-                // 水位线是一种逻辑时钟，Flink认为时间戳小于等于水位线的事件都到了。
+                // 水位线 = 观察到的最大时间戳 - 手动设置的最大延迟时间 - 1毫秒 (Flink 水位线最小的时间粒度是毫秒)
+                // 水位线是一种逻辑时钟，即 水位线 >= 窗口边界时间 - 1毫秒 时，Flink认为时间戳小于等于水位线的事件都到了。
                 // 事件时间的水位线相当于处理时间的机器时间，到了窗口的边界，窗口中的元素就进入计算
                 // 中国处于第8时区
                 // assignTimestampsAndWatermarks 关键的代码，用了这个表示使用逻辑时间

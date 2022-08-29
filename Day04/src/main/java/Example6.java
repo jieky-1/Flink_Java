@@ -22,7 +22,7 @@ public class Example6 {
 
         env
                 // `a 1`
-                .socketTextStream("localhost", 9999)
+                .socketTextStream("hadoop102", 9999)
                 // (a, 1000L)
                 .map(new MapFunction<String, Tuple2<String, Long>>() {
                     @Override
