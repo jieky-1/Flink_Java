@@ -29,6 +29,8 @@ public class Example9 {
                     // 作用域是整个任务槽（而不是单个任务槽中的不同key状态域各自有），queryStream做广播，每个任务槽的query赋值逻辑是一样的
                     private String query = "";
 
+                    // 两个flatMap函数是平等关系，通过一个局部变量交互信息
+
                     @Override
                     public void flatMap1(Event value, Collector<Event> out) throws Exception {
                         if (value.url.equals(query)) out.collect(value);

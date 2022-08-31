@@ -53,6 +53,7 @@ public class Example8 {
 
         stream1
                 .union(stream2)
+                // 合流发送最小的水位线
                 .process(new ProcessFunction<Tuple2<String, Long>, String>() {
                     @Override
                     public void processElement(Tuple2<String, Long> value, Context ctx, Collector<String> out) throws Exception {

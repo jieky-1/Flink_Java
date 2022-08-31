@@ -37,7 +37,7 @@ public class Example5 {
         @Override
         public WatermarkGenerator<Tuple2<String, Long>> createWatermarkGenerator(WatermarkGeneratorSupplier.Context context) {
             return new WatermarkGenerator<Tuple2<String, Long>>() {
-                private Long bound = 5000L; // 最大延迟时间
+                private Long bound = 5000L; // 最大延迟时间 单位：毫秒
                 private Long maxTs = -Long.MAX_VALUE + bound + 1L; // 防止溢出
                 @Override
                 public void onEvent(Tuple2<String, Long> event, long eventTimestamp, WatermarkOutput output) {

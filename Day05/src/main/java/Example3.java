@@ -20,11 +20,11 @@ public class Example3 {
                     public void run(SourceContext<String> ctx) throws Exception {
                         ctx.collectWithTimestamp("a", 1000L);
                         ctx.emitWatermark(new Watermark(999L));
-                        ctx.collectWithTimestamp("a", 2000L);
+                        ctx.collectWithTimestamp("b", 2000L);
                         ctx.emitWatermark(new Watermark(1999L));
-                        ctx.collectWithTimestamp("a", 4000L);
+                        ctx.collectWithTimestamp("c", 4000L);
                         ctx.emitWatermark(new Watermark(4999L));
-                        ctx.collectWithTimestamp("a", 3000L);
+                        ctx.collectWithTimestamp("d", 3000L);
                     }
 
                     @Override
@@ -34,8 +34,9 @@ public class Example3 {
                 })
                 .keyBy(r -> 1)
                 .window(TumblingEventTimeWindows.of(Time.seconds(5)))
-                .sideOutputLateData(new OutputTag<String>("late") {
-                })
+                // 以匿名内部类的形式传递侧输出的名字
+                .sideOutputLateData(new OutputTag<String>("late") {})
+                // 由于手动生成水位线和带指定时间戳的数据，assignTimestampsAndWatermarks可不调用
                 .process(new ProcessWindowFunction<String, String, Integer, TimeWindow>() {
                     @Override
                     public void process(Integer integer, Context context, Iterable<String> elements, Collector<String> out) throws Exception {
