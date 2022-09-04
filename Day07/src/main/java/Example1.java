@@ -5,7 +5,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import java.util.Properties;
 
 // 写入kafka
-// 驱动卸载后面，但是在日志驱动前面
+// 驱动写在后面，但是在日志驱动前面
 public class Example1 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
