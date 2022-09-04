@@ -6,7 +6,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
-
 import static org.apache.flink.table.api.Expressions.$;
 
 // 流 -> 动态表
@@ -16,6 +15,7 @@ public class Example7 {
         env.setParallelism(1);
 
         // 数据源，且设置水位线
+        // 第一步，制作 source 输入
         SingleOutputStreamOperator<Tuple3<String, String, Long>> stream = env
                 .fromElements(
                         Tuple3.of("Mary", "./home", 12 * 60 * 60 * 1000L),
@@ -35,11 +35,16 @@ public class Example7 {
                                 })
                 );
 
-        // 创建表环境：固定写法
+        // Flink SQL 动态表的持续查询:https://www.modb.pro/db/100541
+        // Flink 动态表操作:https://icode.best/i/65708345830357
+        // Flink SQL 入门和实战：https://cloud.tencent.com/developer/article/1450865
+        // Flink SQL 窗口函数:https://segmentfault.com/a/1190000023296719
+
+        // 第二步，创建上下文环境：
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
         StreamTableEnvironment tableEnvironment = StreamTableEnvironment.create(env, settings);
 
-        // 数据流 -> 动态表
+        // 第三步，将 source 数据注册成表。数据流 -> 动态表
         Table table = tableEnvironment
                 .fromDataStream(
                         stream,
@@ -48,9 +53,13 @@ public class Example7 {
                         // 使用rowtime方法指定f2字段是事件时间：不然TABLE不知道那个字段是事件时间
                         $("f2").rowtime().as("cTime")
                 );
+        tableEnvironment.createTemporaryView("click", table);
 
-        // 动态表 -> 数据流
-        tableEnvironment.toDataStream(table).print();
+        // 第四步，核心处理逻辑 SQL 的编写
+        Table result = tableEnvironment.sqlQuery("select user,count(user) from click group by user");
+
+        // 第五步，输出结果。动态表 -> 数据流
+        tableEnvironment.toChangelogStream(result).print("result");
 
         env.execute();
     }

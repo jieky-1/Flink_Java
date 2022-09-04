@@ -66,6 +66,7 @@ public class Example2 {
     public static class CountAgg implements AggregateFunction<UserBehavior, Tuple2<Long, BloomFilter<String>>, Long> {
         @Override
         public Tuple2<Long, BloomFilter<String>> createAccumulator() {
+            // 布隆过滤器(Bloom Filter):https://blog.51cto.com/u_14222592/2892870
             // 处理的数据类型、拟插入的数据量、期望的错误率
             return Tuple2.of(0L, BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), 100000, 0.01));
         }
