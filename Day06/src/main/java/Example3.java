@@ -39,8 +39,8 @@ public class Example3 {
                     public void run(SourceContext<Event> ctx) throws Exception {
                         ctx.collectWithTimestamp(Event.of("order-1", "weixin", 4000L), 4000L);
                         ctx.emitWatermark(new Watermark(3999L));
-                        ctx.emitWatermark(new Watermark(8000L));
-                        ctx.collectWithTimestamp(Event.of("order-2", "weixin", 9000L), 9000L);
+                        ctx.emitWatermark(new Watermark(7999L));
+                        ctx.collectWithTimestamp(Event.of("order-2", "weixin", 4000L), 9000L);
                     }
 
                     @Override

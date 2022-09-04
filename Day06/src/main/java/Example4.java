@@ -47,7 +47,7 @@ public class Example4 {
                                 })
                 );
 
-        // a.ts + low < b.ts < a.ts + high
+        // a.ts + low < b.ts < a.ts + high :
         // a.ts < b.ts + (-low)
         // a.ts > b.ts + (-high)
         // b.ts + (-high) < a.ts < b.ts + (-low)

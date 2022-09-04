@@ -23,7 +23,7 @@ public class Example5 {
                         }));
 
         SingleOutputStreamOperator<Tuple2<String, Integer>> stream2 = env
-                .fromElements(Tuple2.of("a", 2), Tuple2.of("b", 2), Tuple2.of("b", 3))
+                .fromElements(Tuple2.of("a", 2), Tuple2.of("b", 2),Tuple2.of("b", 4999),Tuple2.of("b", 5000))
                 .assignTimestampsAndWatermarks(WatermarkStrategy.<Tuple2<String, Integer>>forMonotonousTimestamps()
                         .withTimestampAssigner(new SerializableTimestampAssigner<Tuple2<String, Integer>>() {
                             @Override

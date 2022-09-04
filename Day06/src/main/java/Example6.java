@@ -10,6 +10,8 @@ public class Example6 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
+        // flink的Checkpoint开启与配置:https://blog.csdn.net/Er_fengV/article/details/120061081
+        // StateBackend 状态后端:https://blog.csdn.net/weixin_32265569/article/details/108449983
         env.setStateBackend(new FsStateBackend("file:///E:\\BigData200105\\Flink_Java\\Day06\\src\\main\\resources\\ckpt", false));
         env.enableCheckpointing(10 * 1000L);
 

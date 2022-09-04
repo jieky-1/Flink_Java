@@ -8,6 +8,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoProcessFunction;
 import org.apache.flink.util.Collector;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 // SELECT * FROM A INNER JOIN B WHERE A.id=B.id;
 public class Example1 {
     public static void main(String[] args) throws Exception {
@@ -32,7 +35,7 @@ public class Example1 {
         stream1
                 .keyBy(r -> r.f0)
                 .connect(stream2.keyBy(r -> r.f0))
-                // 内连接
+                // 内连接:processElement1、processElement2是先后执行，不然结果不成
                 .process(new CoProcessFunction<Tuple2<String, Integer>, Tuple2<String, String>, String>() {
                     private ListState<Tuple2<String, Integer>> listState1;
                     private ListState<Tuple2<String, String>> listState2;
@@ -50,6 +53,9 @@ public class Example1 {
 
                     @Override
                     public void processElement1(Tuple2<String, Integer> value, Context ctx, Collector<String> out) throws Exception {
+                        System.out.println("processElement1:" + value + (new Timestamp(Calendar.getInstance().getTimeInMillis())));
+                        Thread.sleep(1000);
+
                         listState1.add(value);
                         for (Tuple2<String, String> e : listState2.get()) {
                             out.collect(value + " => " + e);
@@ -58,6 +64,9 @@ public class Example1 {
 
                     @Override
                     public void processElement2(Tuple2<String, String> value, Context ctx, Collector<String> out) throws Exception {
+                        System.out.println("processElement2:" + value + (new Timestamp(Calendar.getInstance().getTimeInMillis())));
+                        Thread.sleep(1000);
+
                         listState2.add(value);
                         for (Tuple2<String, Integer> e : listState1.get()) {
                             out.collect(e + " => " + value);

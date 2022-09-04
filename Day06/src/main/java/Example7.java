@@ -1,5 +1,3 @@
-package day06;
-
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class Example7 {
